@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: flairquery-demo-app
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/flairquery}
+    username: ${DB_USER:flairquery}
+    password: ${DB_PASSWORD:flairquery}
+    hikari:
+      maximum-pool-size: ${HIKARI_MAX_POOL:10}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    # TRAP 6: spring.jpa.open-in-view is intentionally NOT set (Spring Boot default = true).
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true

@@ -1,0 +1,4 @@
+# Schema only. Data is NEVER loaded by Liquibase: see corpus/ (COPY).
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-schema.sql
