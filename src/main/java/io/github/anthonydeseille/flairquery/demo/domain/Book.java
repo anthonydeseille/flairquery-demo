@@ -38,7 +38,7 @@ public class Book {
      * TRAP 2: {@code @ManyToOne} is EAGER by default (JPA spec). Never read by GET /books, yet every
      * JPQL query on Book triggers extra selects to load publishers.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
