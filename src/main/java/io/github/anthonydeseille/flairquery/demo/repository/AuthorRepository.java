@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     /**
@@ -17,4 +19,8 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query(value = "select distinct a from Author a join fetch a.books where a.name like concat(:prefix, '%')",
            countQuery = "select count(a) from Author a where a.name like concat(:prefix, '%')")
     Page<Author> findWithBooksByNamePrefix(@Param("prefix") String prefix, Pageable pageable);
+
+    /** Id and name of the authors of a page, ordered by id (no count query). */
+    @Query("select a.id as id, a.name as name from Author a order by a.id")
+    List<AuthorSummary> findSummaries(Pageable pageable);
 }
