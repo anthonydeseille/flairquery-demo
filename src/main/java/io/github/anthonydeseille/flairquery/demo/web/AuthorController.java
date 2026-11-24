@@ -25,13 +25,12 @@ public class AuthorController {
     }
 
     /**
-     * TRAP 1 (N+1) + TRAP 6 (open-in-view): authors are loaded by one query, then each
-     * {@code author.getBooks()} triggers one more query, here in the web layer, outside any transaction:
-     * it only works because spring.jpa.open-in-view keeps the session open.
+     * Authors with their book count and first titles, built in a read-only transaction from two projection
+     * queries (authors, then the titles of their books): no lazy loading in the web layer.
      */
     @GetMapping
     public List<AuthorBooksDto> list(@RequestParam(defaultValue = "50") @Min(1) @Max(500) int limit) {
-        return authors.firstAuthors(limit).stream().map(AuthorController::toDto).toList();
+        return authors.firstAuthors(limit);
     }
 
     /** TRAP 5: JOIN FETCH + pagination (HHH90003004, pagination applied in memory). */
